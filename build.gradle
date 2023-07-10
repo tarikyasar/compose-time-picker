@@ -7,6 +7,8 @@ buildscript {
         ktxLifeCycle = '2.6.1'
 
         material = '1.4.0'
+
+        snapper = '0.3.0'
     }
 }
 

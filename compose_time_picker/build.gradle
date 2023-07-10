@@ -44,4 +44,7 @@ dependencies {
 
     // Material
     implementation "androidx.compose.material:material:$material"
+
+    // Snapper
+    implementation "dev.chrisbanes.snapper:snapper:$snapper"
 }
