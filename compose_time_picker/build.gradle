@@ -12,7 +12,7 @@ def getVersionName = { ->
 }
 
 def getArtifactId = { ->
-    return "compose-time-picker"
+    return "compose_time_picker"
 }
 
 
