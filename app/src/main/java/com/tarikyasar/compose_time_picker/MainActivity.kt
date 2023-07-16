@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.tarikyasar.compose_time_picker.configuration.TimePickerDefaults
 import com.tarikyasar.compose_time_picker.ui.theme.ComposetimepickerTheme
 
 class MainActivity : ComponentActivity() {

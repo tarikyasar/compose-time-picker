@@ -1,7 +1,20 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
 }
+
+def githubProperties = new Properties()
+githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
+
+def getVersionName = { ->
+    return "0.1"
+}
+
+def getArtifactId = { ->
+    return "compose-time-picker"
+}
+
 
 android {
     namespace 'com.tarikyasar.compose_time_picker'
@@ -33,6 +46,29 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion '1.4.4'
+    }
+}
+
+publishing {
+    publications {
+        bar(MavenPublication) {
+            groupId 'com.tarikyasar.libraries' // Replace with group ID
+            artifactId getArtifactId()
+            version getVersionName()
+            artifact("$buildDir/outputs/aar/${getArtifactId()}-release.aar")
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/${githubProperties['gpr.usr']}/compose-time-picker")
+            credentials {
+
+                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+            }
+        }
     }
 }
 

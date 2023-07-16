@@ -1,7 +1,9 @@
 package com.tarikyasar.compose_time_picker
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,15 +32,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.tarikyasar.compose_time_picker.configuration.DividerConfiguration
+import com.tarikyasar.compose_time_picker.configuration.ShapeConfiguration
+import com.tarikyasar.compose_time_picker.configuration.TimePickerDefaults
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.LazyListSnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberLazyListSnapperLayoutInfo
 
-val BACKGROUND_COLOR = Color(0xFF4E4E4E)
-
 @Composable
 fun TimePicker(
-    onTimeSelected: (hour: String, minute: String, second: String) -> Unit
+    onTimeSelected: (hour: String, minute: String, second: String) -> Unit,
+    dividerConfiguration: DividerConfiguration = TimePickerDefaults.dividerConfiguration(),
+    shapeConfiguration: ShapeConfiguration = TimePickerDefaults.shapeConfiguration()
 ) {
     var hour by remember { mutableStateOf<String?>(null) }
     var minute by remember { mutableStateOf<String?>(null) }
@@ -50,7 +55,10 @@ fun TimePicker(
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        HourSelection {
+        HourSelection(
+            dividerConfiguration = dividerConfiguration,
+            shapeConfiguration = shapeConfiguration
+        ) {
             hour = it.toString()
 
             if (it != null && minute != null && second != null) {
@@ -60,7 +68,9 @@ fun TimePicker(
 
         Spacer(modifier = Modifier.width(2.dp))
 
-        MinuteSelection {
+        MinuteSelection(
+            shapeConfiguration = shapeConfiguration
+        ) {
             minute = it.toString()
 
             if (hour != null && it != null && second != null) {
@@ -70,7 +80,9 @@ fun TimePicker(
 
         Spacer(modifier = Modifier.width(2.dp))
 
-        SecondSelection {
+        SecondSelection(
+            shapeConfiguration = shapeConfiguration
+        ) {
             second = it.toString()
 
             if (hour != null && minute != null && it != null) {
@@ -82,8 +94,10 @@ fun TimePicker(
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalSnapperApi::class)
 @Composable
-fun HourSelection(
-    timeSelected: (Int?) -> Unit
+private fun HourSelection(
+    dividerConfiguration: DividerConfiguration,
+    shapeConfiguration: ShapeConfiguration,
+    timeSelected: (Int?) -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
     val layoutInfo: LazyListSnapperLayoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
@@ -99,7 +113,17 @@ fun HourSelection(
     Box(
         modifier = Modifier
             .size(120.dp)
-            .background(color = BACKGROUND_COLOR, shape = RoundedCornerShape(16.dp))
+            .background(
+                color = shapeConfiguration.backgroundColor(),
+                shape = shapeConfiguration.shape(),
+            )
+            .border(
+                border = BorderStroke(
+                    shapeConfiguration.borderWidth(),
+                    shapeConfiguration.borderColor()
+                ),
+                shape = shapeConfiguration.shape()
+            )
     ) {
         LazyColumn(
             modifier = Modifier.align(Alignment.Center),
@@ -111,7 +135,7 @@ fun HourSelection(
                 Text(
                     text = getTime(it),
                     fontSize = 64.sp,
-                    color = if (lazyListState.isScrollInProgress || layoutInfo.currentItem?.index == it) Color.White else BACKGROUND_COLOR,
+                    color = if (lazyListState.isScrollInProgress || layoutInfo.currentItem?.index == it) Color.White else Color.Transparent,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxSize()
@@ -120,17 +144,20 @@ fun HourSelection(
             }
         }
 
-        Divider(
-            modifier = Modifier.align(Alignment.Center),
-            color = Color.Black,
-            thickness = 2.dp
-        )
+        if (dividerConfiguration.showDivider()) {
+            Divider(
+                modifier = Modifier.align(Alignment.Center),
+                color = dividerConfiguration.dividerColor(),
+                thickness = 2.dp
+            )
+        }
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalSnapperApi::class)
 @Composable
 fun MinuteSelection(
+    shapeConfiguration: ShapeConfiguration,
     timeSelected: (Int?) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
@@ -147,7 +174,10 @@ fun MinuteSelection(
     Box(
         modifier = Modifier
             .size(120.dp)
-            .background(color = BACKGROUND_COLOR, shape = RoundedCornerShape(16.dp))
+            .background(
+                color = shapeConfiguration.backgroundColor(),
+                shape = RoundedCornerShape(16.dp)
+            )
     ) {
         LazyColumn(
             modifier = Modifier.align(Alignment.Center),
@@ -159,7 +189,7 @@ fun MinuteSelection(
                 Text(
                     text = getTime(it),
                     fontSize = 64.sp,
-                    color = if (lazyListState.isScrollInProgress || layoutInfo.currentItem?.index == it) Color.White else BACKGROUND_COLOR,
+                    color = if (lazyListState.isScrollInProgress || layoutInfo.currentItem?.index == it) Color.White else shapeConfiguration.backgroundColor(),
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxSize()
@@ -179,6 +209,7 @@ fun MinuteSelection(
 @OptIn(ExperimentalFoundationApi::class, ExperimentalSnapperApi::class)
 @Composable
 fun SecondSelection(
+    shapeConfiguration: ShapeConfiguration,
     timeSelected: (Int?) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
@@ -195,7 +226,10 @@ fun SecondSelection(
     Box(
         modifier = Modifier
             .size(120.dp)
-            .background(color = BACKGROUND_COLOR, shape = RoundedCornerShape(16.dp))
+            .background(
+                color = shapeConfiguration.backgroundColor(),
+                shape = RoundedCornerShape(16.dp)
+            )
     ) {
         LazyColumn(
             modifier = Modifier.align(Alignment.Center),
@@ -207,7 +241,7 @@ fun SecondSelection(
                 Text(
                     text = getTime(it),
                     fontSize = 64.sp,
-                    color = if (lazyListState.isScrollInProgress || layoutInfo.currentItem?.index == it) Color.White else BACKGROUND_COLOR,
+                    color = if (lazyListState.isScrollInProgress || layoutInfo.currentItem?.index == it) Color.White else shapeConfiguration.backgroundColor(),
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxSize()
