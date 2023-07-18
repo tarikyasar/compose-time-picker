@@ -10,7 +10,8 @@ object Constants {
     val SHAPE: Shape = RoundedCornerShape(16.dp)
     val BACKGROUND_COLOR = Color(0xFF4E4E4E)
     val BORDER_COLOR = Color(0xFF4E4E4E)
-    val BORDER_WIDTH: Dp = 1.dp
+    val BORDER_WIDTH: Dp = 0.dp
+    val SHAPE_SIZE: Dp = 120.dp
 
     val DIVIDER_COLOR: Color = Color.Black
 }

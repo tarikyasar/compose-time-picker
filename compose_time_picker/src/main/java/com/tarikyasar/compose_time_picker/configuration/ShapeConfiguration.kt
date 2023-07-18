@@ -12,4 +12,6 @@ interface ShapeConfiguration {
     fun borderColor(): Color
 
     fun borderWidth(): Dp
+
+    fun size(): Dp
 }

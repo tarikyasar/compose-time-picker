@@ -17,12 +17,14 @@ object TimePickerDefaults {
         shape: Shape = Constants.SHAPE,
         backgroundColor: Color = Constants.BACKGROUND_COLOR,
         borderColor: Color = Constants.BORDER_COLOR,
-        borderWidth: Dp = Constants.BORDER_WIDTH
+        borderWidth: Dp = Constants.BORDER_WIDTH,
+        size: Dp = Constants.SHAPE_SIZE
     ): ShapeConfiguration = DefaultShapeConfiguration(
         shape = shape,
         backgroundColor = backgroundColor,
         borderColor = borderColor,
-        borderWidth = borderWidth
+        borderWidth = borderWidth,
+        size = size
     )
 
     @Composable
@@ -61,7 +63,8 @@ object TimePickerDefaults {
         val shape: Shape,
         val backgroundColor: Color,
         val borderColor: Color,
-        val borderWidth: Dp
+        val borderWidth: Dp,
+        val size: Dp
     ) : ShapeConfiguration {
 
         override fun shape(): Shape = shape
@@ -70,6 +73,8 @@ object TimePickerDefaults {
 
         override fun borderColor(): Color = borderColor
         override fun borderWidth(): Dp = borderWidth
+
+        override fun size(): Dp = size
     }
 
     private class DefaultTextConfiguration(
