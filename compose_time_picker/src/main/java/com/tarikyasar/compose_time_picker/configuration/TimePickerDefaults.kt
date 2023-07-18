@@ -3,7 +3,11 @@ package com.tarikyasar.compose_time_picker.configuration
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import com.tarikyasar.compose_time_picker.utils.Constants
 
 object TimePickerDefaults {
@@ -30,6 +34,19 @@ object TimePickerDefaults {
         dividerColor = dividerColor
     )
 
+    @Composable
+    fun textConfiguration(
+        fontSize: TextUnit = 64.sp,
+        fontWeight: FontWeight = FontWeight.Normal,
+        color: Color = Color.White,
+        textAlign: TextAlign = TextAlign.Center
+    ): TextConfiguration = DefaultTextConfiguration(
+        fontSize = fontSize,
+        fontWeight = fontWeight,
+        color = color,
+        textAlign = textAlign
+    )
+
     private class DefaultDividerConfiguration(
         val dividerColor: Color,
         val showDivider: Boolean
@@ -53,5 +70,21 @@ object TimePickerDefaults {
 
         override fun borderColor(): Color = borderColor
         override fun borderWidth(): Dp = borderWidth
+    }
+
+    private class DefaultTextConfiguration(
+        val fontSize: TextUnit,
+        val fontWeight: FontWeight,
+        val color: Color,
+        val textAlign: TextAlign
+    ) : TextConfiguration {
+        override fun fontSize(): TextUnit = fontSize
+
+        override fun fontWeight(): FontWeight = fontWeight
+
+        override fun color(): Color = color
+
+        override fun textAlign(): TextAlign = textAlign
+
     }
 }

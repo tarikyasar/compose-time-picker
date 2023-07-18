@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tarikyasar.compose_time_picker.configuration.DividerConfiguration
 import com.tarikyasar.compose_time_picker.configuration.ShapeConfiguration
+import com.tarikyasar.compose_time_picker.configuration.TextConfiguration
 import com.tarikyasar.compose_time_picker.configuration.TimePickerDefaults
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.LazyListSnapperLayoutInfo
@@ -43,7 +44,8 @@ import dev.chrisbanes.snapper.rememberLazyListSnapperLayoutInfo
 fun TimePicker(
     onTimeSelected: (hour: String, minute: String, second: String) -> Unit,
     dividerConfiguration: DividerConfiguration = TimePickerDefaults.dividerConfiguration(),
-    shapeConfiguration: ShapeConfiguration = TimePickerDefaults.shapeConfiguration()
+    shapeConfiguration: ShapeConfiguration = TimePickerDefaults.shapeConfiguration(),
+    textConfiguration: TextConfiguration = TimePickerDefaults.textConfiguration()
 ) {
     var hour by remember { mutableStateOf<String?>(null) }
     var minute by remember { mutableStateOf<String?>(null) }
@@ -57,7 +59,8 @@ fun TimePicker(
     ) {
         HourSelection(
             dividerConfiguration = dividerConfiguration,
-            shapeConfiguration = shapeConfiguration
+            shapeConfiguration = shapeConfiguration,
+            textConfiguration = textConfiguration
         ) {
             hour = it.toString()
 
@@ -97,6 +100,7 @@ fun TimePicker(
 private fun HourSelection(
     dividerConfiguration: DividerConfiguration,
     shapeConfiguration: ShapeConfiguration,
+    textConfiguration: TextConfiguration,
     timeSelected: (Int?) -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
@@ -134,9 +138,10 @@ private fun HourSelection(
             items(24) {
                 Text(
                     text = getTime(it),
-                    fontSize = 64.sp,
-                    color = if (lazyListState.isScrollInProgress || layoutInfo.currentItem?.index == it) Color.White else Color.Transparent,
-                    textAlign = TextAlign.Center,
+                    fontSize = textConfiguration.fontSize(),
+                    color = if (lazyListState.isScrollInProgress || layoutInfo.currentItem?.index == it) textConfiguration.color() else Color.Transparent,
+                    textAlign = textConfiguration.textAlign(),
+                    fontWeight = textConfiguration.fontWeight(),
                     modifier = Modifier
                         .fillMaxSize()
                         .align(Alignment.Center)
